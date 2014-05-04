@@ -1,0 +1,20 @@
+en:
+  lita:
+    handlers:
+      dig:
+        error:
+          not_implemented: Not implemented yet
+          unknown_type: Unknown record type
+        help:
+          resolve:
+            syntax: dig <record>
+            desc: Resolves <record>
+          resolve_type:
+            syntax: dig <record> <type>
+            desc: Resolves
+          resolve_svr:
+            syntax: dig @<server> <record>
+            desc: Resolves
+          resolve_svr_type:
+            syntax: dig @<server> <record> <type>
+            desc: Resolves

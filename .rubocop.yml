@@ -1,0 +1,16 @@
+ClassLength:
+  Max: 150
+
+CyclomaticComplexity:
+  Max: 56
+
+Documentation:
+  Exclude:
+    - lib/lita/handlers/dig.rb
+
+FileName:
+  Exclude:
+    - lib/lita-dig.rb
+
+MethodLength:
+  Max: 150
