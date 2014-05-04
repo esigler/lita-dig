@@ -1,8 +1,8 @@
 ClassLength:
-  Max: 150
+  Max: 200
 
 CyclomaticComplexity:
-  Max: 56
+  Max: 75
 
 Documentation:
   Exclude:
@@ -13,4 +13,4 @@ FileName:
     - lib/lita-dig.rb
 
 MethodLength:
-  Max: 150
+  Max: 200

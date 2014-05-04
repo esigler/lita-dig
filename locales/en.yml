@@ -5,16 +5,17 @@ en:
         error:
           not_implemented: Not implemented yet
           unknown_type: Unknown record type
+          unable_to_resolve: "Unable to resolve %{argument}"
         help:
           resolve:
-            syntax: dig <record>
-            desc: Resolves <record>
+            syntax: dig <name>
+            desc: Lookup the A record for <name> using the default resolver
           resolve_type:
-            syntax: dig <record> <type>
-            desc: Resolves
+            syntax: dig <name> <type>
+            desc: Lookup the <type> record for <name> using the default resolver
           resolve_svr:
-            syntax: dig @<server> <record>
-            desc: Resolves
+            syntax: dig @<server> <name>
+            desc: Lookup the A record for <name> using <server> as a resolver
           resolve_svr_type:
             syntax: dig @<server> <record> <type>
-            desc: Resolves
+            desc: Lookup the <type> record for <name> using <server> as a resolver

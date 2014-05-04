@@ -11,7 +11,7 @@ module Lita
       )
 
       route(
-        /^dig\s(\S+)\s(\S+)$/,
+        /^dig\s(?!\@)(\S+)\s(\S+)$/,
         :resolve_type,
         command: true,
         help: {
@@ -19,12 +19,52 @@ module Lita
         }
       )
 
+      route(
+        /^dig\s\@(\S+)\s(\S+)$/,
+        :resolve_svr,
+        command: true,
+        help: {
+          t('help.resolve_svr.syntax') => t('help.resolve_svr.desc')
+        }
+      )
+
+      route(
+        /^dig\s\@(\S+)\s(\S+)\s(\S+)$/,
+        :resolve_svr_type,
+        command: true,
+        help: {
+          t('help.resolve_svr_type.syntax') => t('help.resolve_svr_type.desc')
+        }
+      )
+
       def resolve(response)
-        response.reply(format_lookup(lookup(response.matches[0][0])))
+        name = response.matches[0][0]
+        response.reply(format_lookup(lookup(name, 'a')))
       end
 
       def resolve_type(response)
-        case response.matches[0][1]
+        name = response.matches[0][0]
+        type = response.matches[0][1]
+        response.reply(format_lookup(lookup(name, type)))
+      end
+
+      def resolve_svr(response)
+        resolver = response.matches[0][0]
+        name     = response.matches[0][1]
+        response.reply(format_lookup(lookup(name, 'a', resolver)))
+      end
+
+      def resolve_svr_type(response)
+        resolver = response.matches[0][0]
+        name     = response.matches[0][1]
+        type     = response.matches[0][2]
+        response.reply(format_lookup(lookup(name, type, resolver)))
+      end
+
+      private
+
+      def lookup(argument, type, server = nil)
+        case type
         when 'a', 'A'
           type = Net::DNS::A
         when 'ns', 'NS'
@@ -134,19 +174,16 @@ module Lita
         when 'any', 'ANY'
           type = Net::DNS::ANY
         else
-          return response.reply(t('error.unknown_type'))
+          return t('error.unknown_type')
         end
-        response.reply(format_lookup(lookup(response.matches[0][0], type)))
-      end
 
-      private
-
-      def lookup(argument, type = Net::DNS::A, cls = Net::DNS::IN)
         resolver = Net::DNS::Resolver.new
+        resolver.nameservers = server unless server.nil?
+
         begin
-          resolver.query(argument, type, cls)
+          resolver.query(argument, type)
         rescue
-          "Unable to resolve #{argument}"
+          t('error.unable_to_resolve', argument: argument)
         end
       end
 
