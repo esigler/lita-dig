@@ -2,7 +2,7 @@ module Lita
   module Handlers
     class Dig < Handler
       route(
-        /^dig\s(\S+)$/,
+        /^dig\s(\S+)(\s\+short)?$/,
         :resolve,
         command: true,
         help: {
@@ -20,7 +20,7 @@ module Lita
       )
 
       route(
-        /^dig\s\@(\S+)\s(\S+)$/,
+        /^dig\s\@(\S+)\s(\S+)(\s\+short)?$/,
         :resolve_svr,
         command: true,
         help: {
@@ -39,26 +39,36 @@ module Lita
 
       def resolve(response)
         name = response.matches[0][0]
-        response.reply(format_lookup(lookup(name, 'a')))
+        if response.matches[0][1] == ' +short'
+          response.reply(format_lookup_short(lookup(name, 'a')))
+        else
+          response.reply(format_lookup(lookup(name, 'a')))
+        end
       end
 
       def resolve_type(response)
         name = response.matches[0][0]
         type = response.matches[0][1]
-        response.reply(format_lookup(lookup(name, type)))
+        response.reply(format_lookup(lookup(name, type))) \
+          unless type == '+short'
       end
 
       def resolve_svr(response)
         resolver = response.matches[0][0]
         name     = response.matches[0][1]
-        response.reply(format_lookup(lookup(name, 'a', resolver)))
+        if response.matches[0][2] == ' +short'
+          response.reply(format_lookup_short(lookup(name, 'a', resolver)))
+        else
+          response.reply(format_lookup(lookup(name, 'a', resolver)))
+        end
       end
 
       def resolve_svr_type(response)
         resolver = response.matches[0][0]
         name     = response.matches[0][1]
         type     = response.matches[0][2]
-        response.reply(format_lookup(lookup(name, type, resolver)))
+        response.reply(format_lookup(lookup(name, type, resolver))) \
+          unless type == '+short'
       end
 
       private
@@ -189,6 +199,14 @@ module Lita
 
       def format_lookup(lookup)
         lookup.to_s
+      end
+
+      def format_lookup_short(lookup)
+        result = ''
+        lookup.each_address do |ip|
+          result += "#{ip}\n"
+        end
+        result
       end
     end
 

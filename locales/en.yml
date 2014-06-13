@@ -8,14 +8,14 @@ en:
           unable_to_resolve: "Unable to resolve %{argument}"
         help:
           resolve:
-            syntax: dig <name>
-            desc: Lookup the A record for <name> using the default resolver
+            syntax: dig <name> [+short]
+            desc: Lookup the A record for <name> using the default resolver [optionally just IP addressses]
           resolve_type:
             syntax: dig <name> <type>
             desc: Lookup the <type> record for <name> using the default resolver
           resolve_svr:
-            syntax: dig @<server> <name>
-            desc: Lookup the A record for <name> using <server> as a resolver
+            syntax: dig @<server> <name> [+short]
+            desc: Lookup the A record for <name> using <server> as a resolver [optionally just IP addressses]
           resolve_svr_type:
             syntax: dig @<server> <record> <type>
             desc: Lookup the <type> record for <name> using <server> as a resolver

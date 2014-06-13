@@ -26,10 +26,10 @@ None
 Examples:
 
 ```
-dig example.com              - Lookup the A record for example.com using the default resolver
-dig example.com MX           - Lookup the MX record for example.com using the default resolver
-dig @8.8.8.8 example.com     - Lookup the A record for example.com using 8.8.8.8 as a resolver
-dig @8.8.8.8 example.com NS  - Lookup the NS record for example.com using 8.8.8.8 as a resolver
+dig example.com [+short]          - Lookup the A record for example.com using the default resolver (optionally just IP addressses)
+dig example.com MX                - Lookup the MX record for example.com using the default resolver
+dig @8.8.8.8 example.com [+short] - Lookup the A record for example.com using 8.8.8.8 as a resolver (optionally just IP addressses)
+dig @8.8.8.8 example.com NS       - Lookup the NS record for example.com using 8.8.8.8 as a resolver
 ```
 
 The majority of DNS record types (including "any") are supported.

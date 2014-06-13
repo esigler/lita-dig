@@ -33,6 +33,8 @@ describe Lita::Handlers::Dig, lita_handler: true do
   it { routes_command('dig example.com MX').to(:resolve_type) }
   it { routes_command('dig @8.8.8.8 example.com').to(:resolve_svr) }
   it { routes_command('dig @8.8.8.8 example.com MX').to(:resolve_svr_type) }
+  it { routes_command('dig example.com +short').to(:resolve) }
+  it { routes_command('dig @8.8.8.8 example.com +short').to(:resolve_svr) }
 
   describe '#resolve' do
     it 'shows a record if the domain exists' do
