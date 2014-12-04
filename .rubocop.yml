@@ -1,8 +1,16 @@
+AbcSize:
+  Exclude:
+    - lib/lita/handlers/dig.rb
+
 ClassLength:
   Max: 200
 
 CyclomaticComplexity:
   Max: 75
+
+PerceivedComplexity:
+  Exclude:
+    - lib/lita/handlers/dig.rb
 
 Documentation:
   Exclude:

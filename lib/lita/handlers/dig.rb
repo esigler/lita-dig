@@ -38,12 +38,10 @@ module Lita
       )
 
       def resolve(response)
-        name = response.matches[0][0]
-        if response.matches[0][1] == ' +short'
-          response.reply(format_lookup_short(lookup(name, 'a')))
-        else
-          response.reply(format_lookup(lookup(name, 'a')))
-        end
+        name    = response.matches[0][0]
+        compact = response.matches[0][1] == ' +short'
+        result  = lookup(name, 'a')
+        response.reply(format_lookup(result, compact))
       end
 
       def resolve_type(response)
@@ -56,11 +54,9 @@ module Lita
       def resolve_svr(response)
         resolver = response.matches[0][0]
         name     = response.matches[0][1]
-        if response.matches[0][2] == ' +short'
-          response.reply(format_lookup_short(lookup(name, 'a', resolver)))
-        else
-          response.reply(format_lookup(lookup(name, 'a', resolver)))
-        end
+        compact  = response.matches[0][2] == ' +short'
+        result   = lookup(name, 'a', resolver)
+        response.reply(format_lookup(result, compact))
       end
 
       def resolve_svr_type(response)
@@ -197,14 +193,14 @@ module Lita
         end
       end
 
-      def format_lookup(lookup)
-        lookup.to_s
-      end
-
-      def format_lookup_short(lookup)
+      def format_lookup(lookup, compact = false)
         result = ''
-        lookup.each_address do |ip|
-          result += "#{ip}\n"
+        if compact
+          lookup.each_address do |ip|
+            result += "#{ip}\n"
+          end
+        else
+          result = lookup.to_s
         end
         result
       end

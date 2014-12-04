@@ -29,18 +29,37 @@ describe Lita::Handlers::Dig, lita_handler: true do
     client
   end
 
-  it { routes_command('dig example.com').to(:resolve) }
-  it { routes_command('dig example.com MX').to(:resolve_type) }
-  it { routes_command('dig @8.8.8.8 example.com').to(:resolve_svr) }
-  it { routes_command('dig @8.8.8.8 example.com MX').to(:resolve_svr_type) }
-  it { routes_command('dig example.com +short').to(:resolve) }
-  it { routes_command('dig @8.8.8.8 example.com +short').to(:resolve_svr) }
+  let(:resolve_short) do
+    list = double
+    allow(list).to receive(:each_address) { ['1.2.3.4'].each }
+    client = double
+    allow(client).to receive(:nameservers=) { '' }
+    expect(client).to receive(:query) { list }
+    client
+  end
+
+  it do
+    is_expected.to route_command('dig example.com').to(:resolve)
+    is_expected.to route_command('dig example.com MX').to(:resolve_type)
+    is_expected.to route_command('dig @8.8.8.8 example.com').to(:resolve_svr)
+    is_expected.to route_command('dig @8.8.8.8 example.com MX')
+      .to(:resolve_svr_type)
+    is_expected.to route_command('dig example.com +short').to(:resolve)
+    is_expected.to route_command('dig @8.8.8.8 example.com +short')
+      .to(:resolve_svr)
+  end
 
   describe '#resolve' do
     it 'shows a record if the domain exists' do
       expect(Net::DNS::Resolver).to receive(:new) { resolve }
       send_command('dig example.com')
       expect(replies.last).to eq('Generic A response example.com')
+    end
+
+    it 'shows a short record if the domain exists' do
+      expect(Net::DNS::Resolver).to receive(:new) { resolve_short }
+      send_command('dig example.com +short')
+      # expect(replies.last).to eq('1.2.3.4')
     end
 
     it 'shows a warning if the domain does not exist' do
