@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = 'lita-dig'
-  spec.version       = '0.6.0'
+  spec.version       = '1.0.0'
   spec.authors       = ['Eric Sigler']
   spec.email         = ['me@esigler.com']
   spec.description   = 'A Lita handler for resolving DNS records'
