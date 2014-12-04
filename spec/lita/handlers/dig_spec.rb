@@ -40,13 +40,11 @@ describe Lita::Handlers::Dig, lita_handler: true do
 
   it do
     is_expected.to route_command('dig example.com').to(:resolve)
-    is_expected.to route_command('dig example.com MX').to(:resolve_type)
-    is_expected.to route_command('dig @8.8.8.8 example.com').to(:resolve_svr)
-    is_expected.to route_command('dig @8.8.8.8 example.com MX')
-      .to(:resolve_svr_type)
+    is_expected.to route_command('dig example.com MX').to(:resolve)
+    is_expected.to route_command('dig @8.8.8.8 example.com').to(:resolve)
+    is_expected.to route_command('dig @8.8.8.8 example.com MX').to(:resolve)
     is_expected.to route_command('dig example.com +short').to(:resolve)
-    is_expected.to route_command('dig @8.8.8.8 example.com +short')
-      .to(:resolve_svr)
+    is_expected.to route_command('dig @8.8.8.8 example.com +short').to(:resolve)
   end
 
   describe '#resolve' do
@@ -73,9 +71,7 @@ describe Lita::Handlers::Dig, lita_handler: true do
       send_command('dig example.com')
       expect(replies.last).to eq('Unable to resolve example.com')
     end
-  end
 
-  describe '#resolve_type' do
     it 'resolves a uppercase record with a particular type' do
       expect(Net::DNS::Resolver).to receive(:new) { resolve_mx }
       send_command('dig example.com MX')
@@ -115,9 +111,7 @@ describe Lita::Handlers::Dig, lita_handler: true do
       send_command('dig example.com MX')
       expect(replies.last).to eq('Unable to resolve example.com')
     end
-  end
 
-  describe '#resolve_svr' do
     it 'shows a record if the domain exists' do
       expect(Net::DNS::Resolver).to receive(:new) { resolve }
       send_command('dig @8.8.8.8 example.com')
@@ -135,9 +129,7 @@ describe Lita::Handlers::Dig, lita_handler: true do
       send_command('dig @8.8.8.8 example.com')
       expect(replies.last).to eq('Unable to resolve example.com')
     end
-  end
 
-  describe '#resolve_type' do
     it 'resolves a uppercase record with a particular type' do
       expect(Net::DNS::Resolver).to receive(:new) { resolve_mx }
       send_command('dig @8.8.8.8 example.com MX')

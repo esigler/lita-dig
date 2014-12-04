@@ -8,7 +8,12 @@ module Lita
                      unspec tkey tsig ixfr axfr mailb maila any)
 
       route(
-        /^dig\s(\S+)(\s\+short)?$/,
+        /^dig
+          (?:\s\@)?(?<resolver>\S+)?
+          \s(?<record>\S+)
+          (?<type>\s\w+)?
+          (?<short>\s\+short)?$
+        /x,
         :resolve,
         command: true,
         help: {
@@ -16,61 +21,13 @@ module Lita
         }
       )
 
-      route(
-        /^dig\s(?!\@)(\S+)\s(\S+)$/,
-        :resolve_type,
-        command: true,
-        help: {
-          t('help.resolve_type.syntax') => t('help.resolve_type.desc')
-        }
-      )
-
-      route(
-        /^dig\s\@(\S+)\s(\S+)(\s\+short)?$/,
-        :resolve_svr,
-        command: true,
-        help: {
-          t('help.resolve_svr.syntax') => t('help.resolve_svr.desc')
-        }
-      )
-
-      route(
-        /^dig\s\@(\S+)\s(\S+)\s(\S+)$/,
-        :resolve_svr_type,
-        command: true,
-        help: {
-          t('help.resolve_svr_type.syntax') => t('help.resolve_svr_type.desc')
-        }
-      )
-
       def resolve(response)
-        name    = response.matches[0][0]
-        compact = response.matches[0][1] == ' +short'
-        result  = lookup(name, 'a')
-        response.reply(format_lookup(result, compact))
-      end
-
-      def resolve_type(response)
-        name = response.matches[0][0]
-        type = response.matches[0][1]
-        response.reply(format_lookup(lookup(name, type))) \
-          unless type == '+short'
-      end
-
-      def resolve_svr(response)
-        resolver = response.matches[0][0]
-        name     = response.matches[0][1]
-        compact  = response.matches[0][2] == ' +short'
-        result   = lookup(name, 'a', resolver)
-        response.reply(format_lookup(result, compact))
-      end
-
-      def resolve_svr_type(response)
-        resolver = response.matches[0][0]
-        name     = response.matches[0][1]
-        type     = response.matches[0][2]
-        response.reply(format_lookup(lookup(name, type, resolver))) \
-          unless type == '+short'
+        resolver = response.match_data['resolver'] || '8.8.8.8'
+        record   = response.match_data['record']
+        type     = (response.match_data['type'] || 'a').strip
+        short    = response.match_data['short']
+        result   = lookup(record, type, resolver)
+        response.reply(format_lookup(result, short))
       end
 
       private
