@@ -7,7 +7,7 @@
 [![Code Climate](https://img.shields.io/codeclimate/github/esigler/lita-dig.svg)](https://codeclimate.com/github/esigler/lita-dig)
 [![Gemnasium](https://img.shields.io/gemnasium/esigler/lita-dig.svg)](https://gemnasium.com/esigler/lita-dig)
 
-DNS record lookup [handler](https://github.com/jimmycuadra/lita).
+A DNS record lookup plugin for [Lita](https://github.com/jimmycuadra/lita).
 
 ## Installation
 

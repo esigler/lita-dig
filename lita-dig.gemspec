@@ -3,8 +3,8 @@ Gem::Specification.new do |spec|
   spec.version       = '1.0.0'
   spec.authors       = ['Eric Sigler']
   spec.email         = ['me@esigler.com']
-  spec.description   = 'A Lita handler for resolving DNS records'
-  spec.summary       = 'A Lita handler for resolving DNS records'
+  spec.description   = 'A DNS record lookup plugin for Lita'
+  spec.summary       = 'A DNS record lookup plugin for Lita'
   spec.homepage      = 'https://github.com/esigler/lita-dig'
   spec.license       = 'MIT'
   spec.metadata      = { 'lita_plugin_type' => 'handler' }
