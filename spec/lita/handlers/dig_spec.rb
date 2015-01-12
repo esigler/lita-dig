@@ -40,6 +40,7 @@ describe Lita::Handlers::Dig, lita_handler: true do
 
   it do
     is_expected.to route_command('dig example.com').to(:resolve)
+    is_expected.to route_command('dig  example.com').to(:resolve)
     is_expected.to route_command('dig example.com MX').to(:resolve)
     is_expected.to route_command('dig @8.8.8.8 example.com').to(:resolve)
     is_expected.to route_command('dig @8.8.8.8 example.com MX').to(:resolve)

@@ -10,7 +10,7 @@ module Lita
       route(
         /^dig
           (?:\s\@)?(?<resolver>\S+)?
-          \s(?<record>\S+)
+          (\s+(?<record>\S+))
           (?<type>\s\w+)?
           (?<short>\s\+short)?$
         /x,
