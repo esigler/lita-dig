@@ -19,7 +19,11 @@ gem "lita-dig"
 
 ## Configuration
 
-None
+Configuring the default resolver is optional. If nothing specifed, 8.8.8.8 is used.
+
+```
+config.handlers.dig.default_resolver = '127.0.0.1'
+```
 
 ## Usage
 
