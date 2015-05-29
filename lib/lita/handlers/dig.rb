@@ -1,6 +1,8 @@
 module Lita
   module Handlers
     class Dig < Handler
+      config :default_resolver, default: '8.8.8.8'
+
       DNS_TYPES = %w(a ns md cname soa mb mg mr null wks ptr hinfo minfo
                      mx txt rp afsdb x25 isdn rt nsap nsapptr sig key px
                      gpos aaaa loc nxt eid nimloc srv atma naptr kx cert
@@ -22,7 +24,7 @@ module Lita
       )
 
       def resolve(response)
-        resolver = response.match_data['resolver'] || '8.8.8.8'
+        resolver = response.match_data['resolver'] || config.default_resolver
         record   = response.match_data['record']
         type     = (response.match_data['type'] || 'a').strip
         short    = response.match_data['short']
