@@ -29,6 +29,7 @@ module Lita
         type     = (response.match_data['type'] || 'a').strip
         short    = response.match_data['short']
         result   = lookup(record, type, resolver)
+
         response.reply(format_lookup(result, short))
       end
 
@@ -36,8 +37,8 @@ module Lita
 
       def lookup(argument, type, server = nil)
         return t('error.unknown_type') unless DNS_TYPES.include?(type.downcase)
-        type = Object.const_get('Net::DNS::' + type.upcase)
 
+        type = Object.const_get('Net::DNS::' + type.upcase)
         resolver = Net::DNS::Resolver.new
         resolver.nameservers = server unless server.nil?
 
@@ -49,11 +50,8 @@ module Lita
       end
 
       def format_lookup(lookup, compact = false)
-        if compact
-          render_template('compact', lookup: lookup)
-        else
-          render_template('full', lookup: lookup)
-        end
+        compact ? template = 'compact' : template = 'full'
+        render_template(template, lookup: lookup)
       end
     end
 
