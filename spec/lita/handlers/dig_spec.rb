@@ -91,7 +91,7 @@ describe Lita::Handlers::Dig, lita_handler: true do
        x25 isdn rt nsap nsapptr sig key px gpos aaaa loc nxt eid nimloc srv
        atma naptr kx cert dname opt ds sshfp rrsig nsec dnskey uinfo uid gid
        unspec tkey tsig ixfr axfr mailb maila any).each do |type|
-      it 'resolves a record with a particular type' do
+      it "resolves a record with the #{type} type" do
         expect(Net::DNS::Resolver).to receive(:new) { resolve }
         send_command("dig example.com #{type}")
         expect(replies.last).to eq('Generic A response example.com')
