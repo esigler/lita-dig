@@ -49,15 +49,11 @@ module Lita
       end
 
       def format_lookup(lookup, compact = false)
-        result = ''
         if compact
-          lookup.each_address do |ip|
-            result += "#{ip}\n"
-          end
+          render_template('compact', lookup: lookup)
         else
-          result = lookup.to_s
+          render_template('full', lookup: lookup)
         end
-        result
       end
     end
 
