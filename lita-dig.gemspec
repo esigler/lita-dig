@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = 'lita-dig'
-  spec.version       = '1.2.0'
+  spec.version       = '1.3.0'
   spec.authors       = ['Eric Sigler']
   spec.email         = ['me@esigler.com']
   spec.description   = 'A DNS record lookup plugin for Lita'
@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'lita', '>= 4.0'
+  spec.add_runtime_dependency 'lita', '>= 4.2'
   spec.add_runtime_dependency 'net-dns2'
 
   spec.add_development_dependency 'bundler'
