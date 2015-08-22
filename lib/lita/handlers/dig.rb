@@ -50,7 +50,7 @@ module Lita
 
       def format_lookup(lookup, compact = false)
         if compact
-          render_template('compact', ips: lookup.each_address.to_a)
+          render_template('compact', lookup: lookup)
         else
           render_template('full', lookup: lookup)
         end

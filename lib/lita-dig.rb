@@ -8,6 +8,5 @@ require 'net/dns'
 require 'lita/handlers/dig'
 
 Lita::Handlers::Dig.template_root File.expand_path(
-  File.join("..", "..", "templates"),
- __FILE__
+  File.join('..', '..', 'templates'), __FILE__
 )
