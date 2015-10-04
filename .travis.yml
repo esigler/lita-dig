@@ -6,3 +6,7 @@ services:
   - redis-server
 sudo: false
 cache: bundler
+addons:
+  apt:
+    packages:
+    - libpcap-dev
