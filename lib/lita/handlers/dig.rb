@@ -7,7 +7,7 @@ module Lita
                      mx txt rp afsdb x25 isdn rt nsap nsapptr sig key px
                      gpos aaaa loc nxt eid nimloc srv atma naptr kx cert
                      dname opt ds sshfp rrsig nsec dnskey uinfo uid gid
-                     unspec tkey tsig ixfr axfr mailb maila any)
+                     unspec tkey tsig ixfr axfr mailb maila any).freeze
 
       route(
         /^dig
@@ -50,7 +50,7 @@ module Lita
       end
 
       def format_lookup(lookup, compact = false)
-        compact ? template = 'compact' : template = 'full'
+        template = compact ? 'compact' : 'full'
         render_template(template, lookup: lookup)
       end
     end
