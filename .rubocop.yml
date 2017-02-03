@@ -1,3 +1,5 @@
+require: rubocop-rspec
+
 Documentation:
   Exclude:
     - lib/lita/handlers/dig.rb
@@ -5,3 +7,12 @@ Documentation:
 FileName:
   Exclude:
     - lib/lita-dig.rb
+
+RSpec/MessageSpies:
+  EnforcedStyle: receive
+
+RSpec/MultipleExpectations:
+  Max: 2
+
+Metrics/BlockLength:
+  Max: 100

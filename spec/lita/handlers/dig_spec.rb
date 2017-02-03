@@ -40,12 +40,18 @@ describe Lita::Handlers::Dig, lita_handler: true do
     client
   end
 
-  it do
+  it 'matches basic routes' do
     is_expected.to route_command('dig example.com').to(:resolve)
     is_expected.to route_command('dig  example.com').to(:resolve)
     is_expected.to route_command('dig example.com MX').to(:resolve)
+  end
+
+  it 'matches routes with a resolver' do
     is_expected.to route_command('dig @8.8.8.8 example.com').to(:resolve)
     is_expected.to route_command('dig @8.8.8.8 example.com MX').to(:resolve)
+  end
+
+  it 'matches routes with a shorten' do
     is_expected.to route_command('dig example.com +short').to(:resolve)
     is_expected.to route_command('dig @8.8.8.8 example.com +short').to(:resolve)
   end
@@ -98,63 +104,9 @@ describe Lita::Handlers::Dig, lita_handler: true do
       end
     end
 
-    it 'shows a warning if the domain does not exist' do
-      expect(Net::DNS::Resolver).to receive(:new) { resolve_unknown }
-      send_command('dig example.com MX')
-      expect(replies.last).to eq('Unknown domain example.com')
-    end
-
     it 'shows a warning if the type does not exist' do
       send_command('dig example.com omg')
       expect(replies.last).to eq('Unknown record type')
-    end
-
-    it 'shows an error if the request fails' do
-      expect(Net::DNS::Resolver).to receive(:new) { resolve_noresponse }
-      send_command('dig example.com MX')
-      expect(replies.last).to eq('Unable to resolve example.com')
-    end
-
-    it 'shows a record if the domain exists' do
-      expect(Net::DNS::Resolver).to receive(:new) { resolve }
-      send_command('dig @8.8.8.8 example.com')
-      expect(replies.last).to eq('Generic A response example.com')
-    end
-
-    it 'shows a warning if the domain does not exist' do
-      expect(Net::DNS::Resolver).to receive(:new) { resolve_unknown }
-      send_command('dig @8.8.8.8 example.com')
-      expect(replies.last).to eq('Unknown domain example.com')
-    end
-
-    it 'shows an error if the request fails' do
-      expect(Net::DNS::Resolver).to receive(:new) { resolve_noresponse }
-      send_command('dig @8.8.8.8 example.com')
-      expect(replies.last).to eq('Unable to resolve example.com')
-    end
-
-    it 'resolves a uppercase record with a particular type' do
-      expect(Net::DNS::Resolver).to receive(:new) { resolve_mx }
-      send_command('dig @8.8.8.8 example.com MX')
-      expect(replies.last).to eq('Generic MX response example.com')
-    end
-
-    it 'resolves a lowercase record with a particular type' do
-      expect(Net::DNS::Resolver).to receive(:new) { resolve_mx }
-      send_command('dig @8.8.8.8 example.com mx')
-      expect(replies.last).to eq('Generic MX response example.com')
-    end
-
-    it 'shows a warning if the domain does not exist' do
-      expect(Net::DNS::Resolver).to receive(:new) { resolve_unknown }
-      send_command('dig @8.8.8.8 example.com MX')
-      expect(replies.last).to eq('Unknown domain example.com')
-    end
-
-    it 'shows an error if the request fails' do
-      expect(Net::DNS::Resolver).to receive(:new) { resolve_noresponse }
-      send_command('dig @8.8.8.8 example.com MX')
-      expect(replies.last).to eq('Unable to resolve example.com')
     end
   end
 end
