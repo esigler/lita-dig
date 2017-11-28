@@ -1,30 +1,32 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Lita::Handlers::Dig, lita_handler: true do
   let(:resolve) do
     client = double
-    allow(client).to receive(:nameservers=) { '' }
-    expect(client).to receive(:query) { 'Generic A response example.com' }
+    allow(client).to receive(:nameservers=).and_return('')
+    expect(client).to receive(:query).and_return('Basic A record example.com')
     client
   end
 
   let(:resolve_mx) do
     client = double
-    allow(client).to receive(:nameservers=) { '' }
-    expect(client).to receive(:query) { 'Generic MX response example.com' }
+    allow(client).to receive(:nameservers=).and_return('')
+    expect(client).to receive(:query).and_return('Basic MX record example.com')
     client
   end
 
   let(:resolve_unknown) do
     client = double
-    allow(client).to receive(:nameservers=) { '' }
-    expect(client).to receive(:query) { 'Unknown domain example.com' }
+    allow(client).to receive(:nameservers=).and_return('')
+    expect(client).to receive(:query).and_return('Unknown domain example.com')
     client
   end
 
   let(:resolve_noresponse) do
     client = double
-    allow(client).to receive(:nameservers=) { '' }
+    allow(client).to receive(:nameservers=).and_return('')
     expect(client).to receive(:query).and_throw(:NoResponseError)
     client
   end
@@ -35,15 +37,19 @@ describe Lita::Handlers::Dig, lita_handler: true do
       .and_yield('1.2.3.4')
       .and_yield('5.6.7.8')
     client = double
-    allow(client).to receive(:nameservers=) { '' }
-    expect(client).to receive(:query) { list }
+    allow(client).to receive(:nameservers=).and_return('')
+    expect(client).to receive(:query).and_return(list)
     client
   end
 
   it 'matches basic routes' do
     is_expected.to route_command('dig example.com').to(:resolve)
-    is_expected.to route_command('dig  example.com').to(:resolve)
     is_expected.to route_command('dig example.com MX').to(:resolve)
+  end
+
+  it 'matches routes with spaces' do
+    is_expected.to route_command('dig example.com ').to(:resolve)
+    is_expected.to route_command('dig  example.com').to(:resolve)
   end
 
   it 'matches routes with a resolver' do
@@ -60,7 +66,7 @@ describe Lita::Handlers::Dig, lita_handler: true do
     it 'shows a record if the domain exists' do
       expect(Net::DNS::Resolver).to receive(:new) { resolve }
       send_command('dig example.com')
-      expect(replies.last).to eq('Generic A response example.com')
+      expect(replies.last).to eq('Basic A record example.com')
     end
 
     it 'shows a short record if the domain exists' do
@@ -84,23 +90,23 @@ describe Lita::Handlers::Dig, lita_handler: true do
     it 'resolves a uppercase record with a particular type' do
       expect(Net::DNS::Resolver).to receive(:new) { resolve_mx }
       send_command('dig example.com MX')
-      expect(replies.last).to eq('Generic MX response example.com')
+      expect(replies.last).to eq('Basic MX record example.com')
     end
 
     it 'resolves a lowercase record with a particular type' do
       expect(Net::DNS::Resolver).to receive(:new) { resolve_mx }
       send_command('dig example.com mx')
-      expect(replies.last).to eq('Generic MX response example.com')
+      expect(replies.last).to eq('Basic MX record example.com')
     end
 
-    %w(a ns md cname soa mb mg mr null wks ptr hinfo minfo mx txt rp afsdb
+    %w[a ns md cname soa mb mg mr null wks ptr hinfo minfo mx txt rp afsdb
        x25 isdn rt nsap nsapptr sig key px gpos aaaa loc nxt eid nimloc srv
        atma naptr kx cert dname opt ds sshfp rrsig nsec dnskey uinfo uid gid
-       unspec tkey tsig ixfr axfr mailb maila any).each do |type|
+       unspec tkey tsig ixfr axfr mailb maila any].each do |type|
       it "resolves a record with the #{type} type" do
         expect(Net::DNS::Resolver).to receive(:new) { resolve }
         send_command("dig example.com #{type}")
-        expect(replies.last).to eq('Generic A response example.com')
+        expect(replies.last).to eq('Basic A record example.com')
       end
     end
 

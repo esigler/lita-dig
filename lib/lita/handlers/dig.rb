@@ -1,18 +1,21 @@
+# frozen_string_literal: true
+
 module Lita
   module Handlers
     class Dig < Handler
       config :default_resolver, default: '8.8.8.8'
 
-      DNS_TYPES = %w(a ns md cname soa mb mg mr null wks ptr hinfo minfo
+      DNS_TYPES = %w[a ns md cname soa mb mg mr null wks ptr hinfo minfo
                      mx txt rp afsdb x25 isdn rt nsap nsapptr sig key px
                      gpos aaaa loc nxt eid nimloc srv atma naptr kx cert
                      dname opt ds sshfp rrsig nsec dnskey uinfo uid gid
-                     unspec tkey tsig ixfr axfr mailb maila any).freeze
+                     unspec tkey tsig ixfr axfr mailb maila any].freeze
 
       route(
         /^dig
           (?:\s\@)?(?<resolver>\S+)?
           (\s+(?<record>\S+))
+          (\s+)?
           (?<type>\s\w+)?
           (?<short>\s\+short)?$
         /x,
@@ -42,11 +45,9 @@ module Lita
         resolver = Net::DNS::Resolver.new
         resolver.nameservers = server unless server.nil?
 
-        begin
-          resolver.query(argument, type)
-        rescue
-          t('error.unable_to_resolve', argument: argument)
-        end
+        resolver.query(argument, type)
+      rescue StandardError
+        t('error.unable_to_resolve', argument: argument)
       end
 
       def format_lookup(lookup, compact = false)
