@@ -38,12 +38,12 @@ module Lita
 
       private
 
-      def lookup(argument, type, server = nil)
+      def lookup(argument, type, server)
         return t('error.unknown_type') unless DNS_TYPES.include?(type.downcase)
 
         type = Object.const_get('Net::DNS::' + type.upcase)
         resolver = Net::DNS::Resolver.new
-        resolver.nameservers = server unless server.nil?
+        resolver.nameservers = server
 
         resolver.query(argument, type)
       rescue StandardError
