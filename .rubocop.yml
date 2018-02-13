@@ -16,3 +16,6 @@ RSpec/MultipleExpectations:
 
 Metrics/BlockLength:
   Max: 100
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false

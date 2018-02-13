@@ -5,11 +5,12 @@ module Lita
     class Dig < Handler
       config :default_resolver, default: '8.8.8.8'
 
-      DNS_TYPES = %w[a ns md cname soa mb mg mr null wks ptr hinfo minfo
-                     mx txt rp afsdb x25 isdn rt nsap nsapptr sig key px
-                     gpos aaaa loc nxt eid nimloc srv atma naptr kx cert
-                     dname opt ds sshfp rrsig nsec dnskey uinfo uid gid
-                     unspec tkey tsig ixfr axfr mailb maila any].freeze
+      DNS_TYPES = %w[a aaaa afsdb any atma axfr cert cname dname dnskey
+                     ds eid gid gpos hinfo isdn ixfr key kx loc maila
+                     mailb mb md mg minfo mr mx naptr nimloc ns nsap
+                     nsapptr nsec null nxt opt ptr px rp rrsig rt sig
+                     soa srv sshfp tkey tsig txt uid uinfo unspec wks
+                     x25].freeze
 
       route(
         /^dig
